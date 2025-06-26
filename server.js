@@ -15,3 +15,14 @@ app.get("*", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+services:
+  - type: web
+    name: vibeCodeSpace
+    env: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20
