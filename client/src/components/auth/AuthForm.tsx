@@ -76,3 +76,37 @@ const AuthForm = ({ mode, onToggle }: AuthFormProps) => {
               />
             </div>
             <div>
+              <Label htmlFor="password" className="text-gray-300">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="Enter your password"
+              />
+            </div>
+            <Button 
+              type="submit" 
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+              disabled={loading}
+            >
+              {loading ? 'Processing...' : (mode === 'signup' ? 'Create Account' : 'Sign In')}
+            </Button>
+          </form>
+          <div className="mt-4 text-center">
+            <button
+              onClick={onToggle}
+              className="text-purple-400 hover:text-purple-300 text-sm"
+            >
+              {mode === 'signup' ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+            </button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default AuthForm;

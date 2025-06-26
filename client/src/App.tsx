@@ -1,13 +1,11 @@
-import { CallToAction } from "@/components/CallToAction.tsx";
-import { Hero } from "@/components/Hero.tsx";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Router, Route, Switch } from "wouter";
-import { AuthProvider } from "@/components/auth/AuthForm.tsx";
-import ProtectedRoute from "@/components/ProtectedRoute.tsx";
-import Index from "@/components/index/Index";
-import Auth from "@/hooks/useAuth.tsx";
-import Dashboard from "@/components/dashboard/Dashboard";
+import { AuthProvider } from "@/hooks/useAuth";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import Index from "@/pages/Index";
+import Auth from "@/pages/Auth";
+import Dashboard from "@/components/Dashboard";
 import NotFound from "@/pages/NotFound";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";

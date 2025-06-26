@@ -1,0 +1,23 @@
+{
+  "include": ["*.ts", "*.js", "shared/**/*"],
+  "exclude": ["node_modules", "client", "dist"],
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": false,
+    "moduleResolution": "node",
+    "declaration": false,
+    "sourceMap": false,
+    "removeComments": true,
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["./shared/*"]
+    }
+  }
+}
