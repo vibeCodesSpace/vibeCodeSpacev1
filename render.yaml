@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: vibecode-app
+    env: node
+    region: oregon
+    plan: starter
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false  
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+    autoDeploy: true
+    
+databases:
+  - name: vibecode-db
+    plan: starter
+    region: oregon
