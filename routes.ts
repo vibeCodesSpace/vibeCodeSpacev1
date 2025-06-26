@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertUserSchema } from "@shared/schema";
+import { insertUserSchema } from "./schema.js";
 import { z } from "zod";
 import { aiManager } from "./ai/manager";
 import { siteStorage } from "./storage/sites";
