@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ResumeData {
   name: string;
@@ -31,14 +31,14 @@ const ResumeProcessor = ({ file, onProcessed }: ResumeProcessorProps) => {
 
   const processResume = async () => {
     setIsProcessing(true);
-    
+
     try {
       // Simulate resume processing
       const resumeData = await simulateResumeExtraction(file);
       const portfolioHTML = generatePortfolioHTML(resumeData);
-      
+
       onProcessed(resumeData, portfolioHTML);
-      
+
       toast({
         title: "Resume Processed!",
         description: "Your portfolio site has been generated from your resume.",
@@ -54,38 +54,51 @@ const ResumeProcessor = ({ file, onProcessed }: ResumeProcessorProps) => {
     }
   };
 
-  const simulateResumeExtraction = async (resumeFile: File): Promise<ResumeData> => {
+  const simulateResumeExtraction = async (
+    resumeFile: File,
+  ): Promise<ResumeData> => {
     // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     // Return mock data (in real app, this would use OCR/AI to extract from PDF/DOC)
     return {
       name: "John Developer",
       email: "john@example.com",
       phone: "(555) 123-4567",
-      summary: "Experienced software developer with 5+ years in web development, specializing in React and Node.js.",
+      summary:
+        "Experienced software developer with 5+ years in web development, specializing in React and Node.js.",
       experience: [
         {
           title: "Senior Frontend Developer",
           company: "Tech Corp",
           duration: "2021 - Present",
-          description: "Led development of customer-facing web applications using React and TypeScript."
+          description:
+            "Led development of customer-facing web applications using React and TypeScript.",
         },
         {
           title: "Full Stack Developer",
           company: "StartupXYZ",
           duration: "2019 - 2021",
-          description: "Built scalable web applications and APIs using Node.js and MongoDB."
-        }
+          description:
+            "Built scalable web applications and APIs using Node.js and MongoDB.",
+        },
       ],
       education: [
         {
           degree: "Bachelor of Science in Computer Science",
           school: "University of Technology",
-          year: "2019"
-        }
+          year: "2019",
+        },
       ],
-      skills: ["JavaScript", "React", "Node.js", "TypeScript", "Python", "AWS", "Docker"]
+      skills: [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "TypeScript",
+        "Python",
+        "AWS",
+        "Docker",
+      ],
     };
   };
 
@@ -175,31 +188,39 @@ const ResumeProcessor = ({ file, onProcessed }: ResumeProcessorProps) => {
 
         <div class="section">
             <h2>💼 Experience</h2>
-            ${data.experience.map(exp => `
+            ${data.experience
+              .map(
+                (exp) => `
                 <div class="experience-item">
                     <div class="job-title">${exp.title}</div>
                     <div class="company">${exp.company}</div>
                     <div class="duration">${exp.duration}</div>
                     <p style="margin-top: 10px;">${exp.description}</p>
                 </div>
-            `).join('')}
+            `,
+              )
+              .join("")}
         </div>
 
         <div class="section">
             <h2>🎓 Education</h2>
-            ${data.education.map(edu => `
+            ${data.education
+              .map(
+                (edu) => `
                 <div class="education-item">
                     <div class="job-title">${edu.degree}</div>
                     <div class="company">${edu.school}</div>
                     <div class="duration">${edu.year}</div>
                 </div>
-            `).join('')}
+            `,
+              )
+              .join("")}
         </div>
 
         <div class="section">
             <h2>🚀 Skills</h2>
             <div class="skills">
-                ${data.skills.map(skill => `<span class="skill">${skill}</span>`).join('')}
+                ${data.skills.map((skill) => `<span class="skill">${skill}</span>`).join("")}
             </div>
         </div>
 
@@ -213,7 +234,7 @@ const ResumeProcessor = ({ file, onProcessed }: ResumeProcessorProps) => {
 
   return {
     processResume,
-    isProcessing
+    isProcessing,
   };
 };
 

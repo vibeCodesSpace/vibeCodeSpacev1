@@ -1,6 +1,12 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useLocation } from 'wouter';
-import { apiRequest } from '@/lib/queryClient';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { useLocation } from "wouter";
+import { apiRequest } from "@/lib/queryClient";
 
 interface User {
   id: number;
@@ -24,7 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Check for existing session
-    const savedUser = localStorage.getItem('vibecode_user');
+    const savedUser = localStorage.getItem("vibecode_user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
@@ -33,38 +39,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await apiRequest('/api/auth/login', {
-        method: 'POST',
+      const response = await apiRequest("/api/auth/login", {
+        method: "POST",
         body: JSON.stringify({ username, password }),
       });
-      
+
       setUser(response.user);
-      localStorage.setItem('vibecode_user', JSON.stringify(response.user));
-      setLocation('/dashboard');
+      localStorage.setItem("vibecode_user", JSON.stringify(response.user));
+      setLocation("/dashboard");
     } catch (error) {
-      throw new Error('Login failed');
+      throw new Error("Login failed");
     }
   };
 
   const signup = async (username: string, password: string) => {
     try {
-      const response = await apiRequest('/api/auth/signup', {
-        method: 'POST',
+      const response = await apiRequest("/api/auth/signup", {
+        method: "POST",
         body: JSON.stringify({ username, password }),
       });
-      
+
       setUser(response.user);
-      localStorage.setItem('vibecode_user', JSON.stringify(response.user));
-      setLocation('/dashboard');
+      localStorage.setItem("vibecode_user", JSON.stringify(response.user));
+      setLocation("/dashboard");
     } catch (error) {
-      throw new Error('Signup failed');
+      throw new Error("Signup failed");
     }
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('vibecode_user');
-    setLocation('/');
+    localStorage.removeItem("vibecode_user");
+    setLocation("/");
   };
 
   return (
@@ -77,7 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 };

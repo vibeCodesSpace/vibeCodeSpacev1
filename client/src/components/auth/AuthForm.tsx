@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
-import { Sparkles } from 'lucide-react';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { Sparkles } from "lucide-react";
 
 interface AuthFormProps {
-  mode: 'signup' | 'login';
+  mode: "signup" | "login";
   onToggle: () => void;
 }
 
 const AuthForm = ({ mode, onToggle }: AuthFormProps) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const { login, signup } = useAuth();
@@ -24,20 +24,24 @@ const AuthForm = ({ mode, onToggle }: AuthFormProps) => {
     setLoading(true);
 
     try {
-      if (mode === 'signup') {
+      if (mode === "signup") {
         await signup(username, password);
       } else {
         await login(username, password);
       }
-      
+
       toast({
-        title: mode === 'signup' ? "Account created!" : "Logged in!",
-        description: mode === 'signup' ? "Welcome to VibeCode!" : "Welcome back!",
+        title: mode === "signup" ? "Account created!" : "Logged in!",
+        description:
+          mode === "signup" ? "Welcome to VibeCode!" : "Welcome back!",
       });
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -58,13 +62,15 @@ const AuthForm = ({ mode, onToggle }: AuthFormProps) => {
             </span>
           </div>
           <CardTitle className="text-2xl text-white">
-            {mode === 'signup' ? 'Create Account' : 'Welcome Back'}
+            {mode === "signup" ? "Create Account" : "Welcome Back"}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="username" className="text-gray-300">Username</Label>
+              <Label htmlFor="username" className="text-gray-300">
+                Username
+              </Label>
               <Input
                 id="username"
                 type="text"
@@ -76,7 +82,9 @@ const AuthForm = ({ mode, onToggle }: AuthFormProps) => {
               />
             </div>
             <div>
-              <Label htmlFor="password" className="text-gray-300">Password</Label>
+              <Label htmlFor="password" className="text-gray-300">
+                Password
+              </Label>
               <Input
                 id="password"
                 type="password"
@@ -87,12 +95,16 @@ const AuthForm = ({ mode, onToggle }: AuthFormProps) => {
                 placeholder="Enter your password"
               />
             </div>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
               disabled={loading}
             >
-              {loading ? 'Processing...' : (mode === 'signup' ? 'Create Account' : 'Sign In')}
+              {loading
+                ? "Processing..."
+                : mode === "signup"
+                  ? "Create Account"
+                  : "Sign In"}
             </Button>
           </form>
           <div className="mt-4 text-center">
@@ -100,7 +112,9 @@ const AuthForm = ({ mode, onToggle }: AuthFormProps) => {
               onClick={onToggle}
               className="text-purple-400 hover:text-purple-300 text-sm"
             >
-              {mode === 'signup' ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+              {mode === "signup"
+                ? "Already have an account? Sign in"
+                : "Don't have an account? Sign up"}
             </button>
           </div>
         </CardContent>

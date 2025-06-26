@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Upload, Wand2, X } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Upload, Wand2, X } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProjectCreatorProps {
   onCreateProject: (project: any) => void;
@@ -13,9 +13,9 @@ interface ProjectCreatorProps {
 }
 
 const ProjectCreator = ({ onCreateProject, onCancel }: ProjectCreatorProps) => {
-  const [projectType, setProjectType] = useState<'resume' | 'prompt'>('resume');
-  const [projectName, setProjectName] = useState('');
-  const [description, setDescription] = useState('');
+  const [projectType, setProjectType] = useState<"resume" | "prompt">("resume");
+  const [projectName, setProjectName] = useState("");
+  const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [generating, setGenerating] = useState(false);
   const { toast } = useToast();
@@ -25,13 +25,17 @@ const ProjectCreator = ({ onCreateProject, onCancel }: ProjectCreatorProps) => {
     if (uploadedFile) {
       setFile(uploadedFile);
       if (!projectName) {
-        setProjectName(`${uploadedFile.name.split('.')[0]} Portfolio`);
+        setProjectName(`${uploadedFile.name.split(".")[0]} Portfolio`);
       }
     }
   };
 
   const handleGenerate = async () => {
-    if (!projectName || (projectType === 'resume' && !file) || (projectType === 'prompt' && !description)) {
+    if (
+      !projectName ||
+      (projectType === "resume" && !file) ||
+      (projectType === "prompt" && !description)
+    ) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields",
@@ -44,13 +48,16 @@ const ProjectCreator = ({ onCreateProject, onCancel }: ProjectCreatorProps) => {
 
     try {
       // Simulate AI generation process
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
       const project = {
         name: projectName,
         type: projectType,
-        description: projectType === 'resume' ? `Portfolio generated from ${file?.name}` : description,
-        url: `https://${projectName.toLowerCase().replace(/\s+/g, '-')}.vibecode.app`,
+        description:
+          projectType === "resume"
+            ? `Portfolio generated from ${file?.name}`
+            : description,
+        url: `https://${projectName.toLowerCase().replace(/\s+/g, "-")}.vibecode.app`,
       };
 
       onCreateProject(project);
@@ -83,16 +90,16 @@ const ProjectCreator = ({ onCreateProject, onCancel }: ProjectCreatorProps) => {
       <CardContent className="space-y-6">
         <div className="flex gap-4">
           <Button
-            variant={projectType === 'resume' ? 'default' : 'outline'}
-            onClick={() => setProjectType('resume')}
+            variant={projectType === "resume" ? "default" : "outline"}
+            onClick={() => setProjectType("resume")}
             className="flex-1"
           >
             <Upload className="w-4 h-4 mr-2" />
             Upload Resume
           </Button>
           <Button
-            variant={projectType === 'prompt' ? 'default' : 'outline'}
-            onClick={() => setProjectType('prompt')}
+            variant={projectType === "prompt" ? "default" : "outline"}
+            onClick={() => setProjectType("prompt")}
             className="flex-1"
           >
             <Wand2 className="w-4 h-4 mr-2" />
@@ -101,7 +108,9 @@ const ProjectCreator = ({ onCreateProject, onCancel }: ProjectCreatorProps) => {
         </div>
 
         <div>
-          <Label htmlFor="projectName" className="text-gray-300">Project Name</Label>
+          <Label htmlFor="projectName" className="text-gray-300">
+            Project Name
+          </Label>
           <Input
             id="projectName"
             value={projectName}
@@ -111,9 +120,11 @@ const ProjectCreator = ({ onCreateProject, onCancel }: ProjectCreatorProps) => {
           />
         </div>
 
-        {projectType === 'resume' ? (
+        {projectType === "resume" ? (
           <div>
-            <Label htmlFor="resume" className="text-gray-300">Upload Resume (PDF, DOC, DOCX)</Label>
+            <Label htmlFor="resume" className="text-gray-300">
+              Upload Resume (PDF, DOC, DOCX)
+            </Label>
             <Input
               id="resume"
               type="file"
@@ -129,7 +140,9 @@ const ProjectCreator = ({ onCreateProject, onCancel }: ProjectCreatorProps) => {
           </div>
         ) : (
           <div>
-            <Label htmlFor="description" className="text-gray-300">Describe Your App</Label>
+            <Label htmlFor="description" className="text-gray-300">
+              Describe Your App
+            </Label>
             <Textarea
               id="description"
               value={description}
@@ -145,7 +158,7 @@ const ProjectCreator = ({ onCreateProject, onCancel }: ProjectCreatorProps) => {
           disabled={generating}
           className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
         >
-          {generating ? 'Generating Your Site...' : 'Generate Site'}
+          {generating ? "Generating Your Site..." : "Generate Site"}
         </Button>
       </CardContent>
     </Card>

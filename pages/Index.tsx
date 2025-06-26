@@ -1,10 +1,9 @@
-
-import Hero from '@/components/Hero';
-import Features from '@/components/Features';
-import TechStack from '@/components/TechStack';
-import Testimonials from '@/components/Testimonials';
-import CallToAction from '@/components/CallToAction';
-import Footer from '@/components/Footer';
+import Hero from "@/components/Hero";
+import Features from "@/components/Features";
+import TechStack from "@/components/TechStack";
+import Testimonials from "@/components/Testimonials";
+import CallToAction from "@/components/CallToAction";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (

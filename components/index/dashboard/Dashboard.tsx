@@ -1,29 +1,29 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, FileText, Globe, Settings, LogOut } from 'lucide-react';
-import ProjectCreator from './ProjectCreator';
-import ProjectList from './ProjectList';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Plus, FileText, Globe, Settings, LogOut } from "lucide-react";
+import ProjectCreator from "./ProjectCreator";
+import ProjectList from "./ProjectList";
 
 const Dashboard = () => {
   const [showCreator, setShowCreator] = useState(false);
   const [projects, setProjects] = useState([
     {
-      id: '1',
-      name: 'My Portfolio',
-      type: 'resume',
-      url: 'https://myportfolio.vibecode.app',
-      status: 'deployed',
-      createdAt: '2024-01-15'
-    }
+      id: "1",
+      name: "My Portfolio",
+      type: "resume",
+      url: "https://myportfolio.vibecode.app",
+      status: "deployed",
+      createdAt: "2024-01-15",
+    },
   ]);
 
   const handleCreateProject = (project: any) => {
     const newProject = {
       ...project,
       id: Date.now().toString(),
-      status: 'building',
-      createdAt: new Date().toISOString().split('T')[0]
+      status: "building",
+      createdAt: new Date().toISOString().split("T")[0],
     };
     setProjects([newProject, ...projects]);
     setShowCreator(false);
@@ -82,7 +82,8 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <p className="text-gray-400 mb-4">
-                Upload your resume and get a professional portfolio site instantly
+                Upload your resume and get a professional portfolio site
+                instantly
               </p>
               <Button variant="outline" className="w-full">
                 Upload Resume

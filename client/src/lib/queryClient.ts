@@ -14,7 +14,7 @@ export const apiRequest = async (url: string, options?: RequestInit) => {
   const response = await fetch(url, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...options?.headers,
     },
   });
@@ -24,4 +24,4 @@ export const apiRequest = async (url: string, options?: RequestInit) => {
   }
 
   return response.json();
-}; 
+};

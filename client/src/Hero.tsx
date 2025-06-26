@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles } from 'lucide-react';
-import { useLocation } from 'wouter';
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { useLocation } from "wouter";
 
 const Hero = () => {
   const [, setLocation] = useLocation();
@@ -10,7 +10,7 @@ const Hero = () => {
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-gray-900 to-blue-900/20" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent" />
-      
+
       <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
         {/* Logo and badge */}
         <div className="flex items-center justify-center mb-8">
@@ -32,19 +32,22 @@ const Hero = () => {
         <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-purple-100 to-blue-100 bg-clip-text text-transparent leading-tight">
           Imagine describing an idea —
           <br />
-          <span className="text-4xl md:text-6xl">and watching it become real</span>
+          <span className="text-4xl md:text-6xl">
+            and watching it become real
+          </span>
         </h1>
 
         <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-          VibeCode makes that real. Just describe what you want — or upload your resume — 
-          and VibeCode instantly builds and hosts a personal site or functional app.
+          VibeCode makes that real. Just describe what you want — or upload your
+          resume — and VibeCode instantly builds and hosts a personal site or
+          functional app.
         </p>
 
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-          <Button 
-            size="lg" 
-            onClick={() => setLocation('/auth')}
+          <Button
+            size="lg"
+            onClick={() => setLocation("/auth")}
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-purple-500/25"
           >
             Get Early Access

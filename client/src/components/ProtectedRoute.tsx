@@ -1,6 +1,6 @@
-import { ReactNode, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { useLocation } from 'wouter';
+import { ReactNode, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useLocation } from "wouter";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   useEffect(() => {
     if (!loading && !user) {
-      setLocation('/auth');
+      setLocation("/auth");
     }
   }, [user, loading, setLocation]);
 

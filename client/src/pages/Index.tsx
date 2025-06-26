@@ -1,5 +1,5 @@
-import Hero from '@/components/Hero';
-import CallToAction from '@/components/CallToAction';
+import Hero from "@/components/Hero";
+import CallToAction from "@/components/CallToAction";
 
 const Index = () => {
   return (

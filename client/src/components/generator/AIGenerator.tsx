@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface AIGeneratorProps {
   prompt: string;
@@ -12,12 +12,12 @@ const AIGenerator = ({ prompt, onGenerated }: AIGeneratorProps) => {
 
   const generateCode = async () => {
     setIsGenerating(true);
-    
+
     try {
       // TODO: Replace with actual OpenAI API call when Supabase is connected
       const response = await simulateAIGeneration(prompt);
       onGenerated(response);
-      
+
       toast({
         title: "Code Generated!",
         description: "Your application has been generated successfully.",
@@ -36,8 +36,8 @@ const AIGenerator = ({ prompt, onGenerated }: AIGeneratorProps) => {
   // Simulate AI code generation
   const simulateAIGeneration = async (userPrompt: string): Promise<string> => {
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     // Return template code based on prompt
     return `
 <!DOCTYPE html>
@@ -88,7 +88,7 @@ const AIGenerator = ({ prompt, onGenerated }: AIGeneratorProps) => {
 
   return {
     generateCode,
-    isGenerating
+    isGenerating,
   };
 };
 
