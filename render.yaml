@@ -6,6 +6,7 @@ services:
     plan: starter
     buildCommand: npm run build
     startCommand: npm start
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
@@ -17,6 +18,12 @@ services:
         sync: false
       - key: DATABASE_URL
         sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: SLACK_WEBHOOK_URL
+        sync: false
+      - key: LOG_LEVEL
+        value: info
     autoDeploy: true
     
 databases:

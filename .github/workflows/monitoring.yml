@@ -1,0 +1,86 @@
+name: Health Monitoring
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Every 15 minutes
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check application health
+      id: health
+      run: |
+        APP_URL="${{ secrets.APP_URL || 'https://vibecode-app.onrender.com' }}"
+        HEALTH_URL="$APP_URL/health"
+        
+        echo "Checking health at: $HEALTH_URL"
+        
+        if curl -f -s "$HEALTH_URL" > /dev/null; then
+          echo "status=healthy" >> $GITHUB_OUTPUT
+          echo "✅ Application is healthy"
+        else
+          echo "status=unhealthy" >> $GITHUB_OUTPUT
+          echo "❌ Application health check failed"
+          exit 1
+        fi
+
+    - name: Check detailed health
+      if: steps.health.outputs.status == 'healthy'
+      run: |
+        APP_URL="${{ secrets.APP_URL || 'https://vibecode-app.onrender.com' }}"
+        DETAILED_URL="$APP_URL/health/detailed"
+        
+        echo "Checking detailed health..."
+        RESPONSE=$(curl -s "$DETAILED_URL" || echo "failed")
+        
+        if echo "$RESPONSE" | grep -q '"status":"healthy"'; then
+          echo "✅ Detailed health check passed"
+        else
+          echo "⚠️ Detailed health check shows issues:"
+          echo "$RESPONSE"
+        fi
+
+    - name: Notify Slack on failure
+      if: failure() && env.SLACK_WEBHOOK_URL
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+        --data '{"text":"🚨 Health Check Failed!\n\nApplication: VibeCode\nTime: '$(date)'\n\nThe automated health check detected an issue."}' \
+        "${{ secrets.SLACK_WEBHOOK_URL }}"
+
+    - name: Create incident issue
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: 'incident,automated',
+            state: 'open'
+          });
+          
+          if (issues.data.length === 0) {
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 INCIDENT: Application Health Check Failed',
+              body: \`## Application Health Check Failed
+              
+**Time:** \${new Date().toISOString()}
+**Workflow:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+The automated health monitoring detected that the application is not responding properly.
+
+**Immediate Actions Needed:**
+1. Check application logs in Render dashboard
+2. Verify database connectivity  
+3. Check for recent deployments that might have caused issues
+4. Monitor application metrics
+
+This incident was automatically detected and reported.\`,
+              labels: ['incident', 'automated', 'high-priority']
+            });
+          }

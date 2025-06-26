@@ -1,0 +1,103 @@
+name: Auto-Fix Common Issues
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
+
+jobs:
+  auto-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run TypeScript check
+      id: typecheck
+      run: npm run check
+      continue-on-error: true
+
+    - name: Run build check
+      id: build
+      run: npm run build
+      continue-on-error: true
+
+    - name: Auto-fix formatting
+      run: |
+        # Install prettier if not present
+        npx prettier --write "**/*.{ts,tsx,js,jsx,json,md}" || true
+
+    - name: Auto-fix linting issues
+      run: |
+        # Install and run eslint with auto-fix
+        npx eslint --fix "**/*.{ts,tsx,js,jsx}" --ext .ts,.tsx,.js,.jsx || true
+
+    - name: Update dependencies (security fixes only)
+      run: |
+        npm audit fix --only=prod || true
+
+    - name: Check for changes
+      id: changes
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "changes=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Commit auto-fixes
+      if: steps.changes.outputs.changes == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "🤖 Auto-fix: formatting, linting, and security updates [skip ci]" || exit 0
+        git push
+
+    - name: Create issue if build fails
+      if: steps.build.outcome == 'failure'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: '🚨 Build Failed - Automatic Detection',
+            body: `
+              ## Build Failure Detected
+              
+              The automated build check failed. This might require manual intervention.
+              
+              **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              
+              **Possible Issues:**
+              - TypeScript compilation errors
+              - Missing dependencies
+              - Configuration issues
+              
+              **Next Steps:**
+              1. Check the workflow logs for specific errors
+              2. Run \`npm run build\` locally to reproduce
+              3. Fix the underlying issues
+              
+              This issue was automatically created by GitHub Actions.
+            `,
+            labels: ['bug', 'automated', 'build-failure']
+          });
