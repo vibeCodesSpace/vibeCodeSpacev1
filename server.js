@@ -1,30 +1,21 @@
-const express = require("express");
-const path = require("path");
+import express from "express";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
-const slackWebhook = process.env.SLACK_WEBHOOK_URL;
-const openaiKey = process.env.OPENAI_API_KEY;
 
 // Serve static files from the 'dist' folder
-app.use(express.static(path.join(__dirname, "dist")));
+app.use(express.static(path.join(__dirname, "dist", "public")));
 
 // For all GET requests, send back index.html so React Router works
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "dist", "public", "index.html"));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
-
-services:
-  - type: web
-    name: vibeCodeSpace
-    env: node
-    plan: free
-    buildCommand: npm run build
-    startCommand: node server.js
-    envVars:
-      - key: NODE_VERSION
-        value: 20
