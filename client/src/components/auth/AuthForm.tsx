@@ -17,7 +17,25 @@ const AuthForm = ({ mode, onToggle }: AuthFormProps) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const { login, signup } = useAuth();
+  const { login, signup, signInWithGoogle } = useAuth();
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,6 +123,15 @@ const AuthForm = ({ mode, onToggle }: AuthFormProps) => {
                 : mode === "signup"
                   ? "Create Account"
                   : "Sign In"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Sign In with Google"}
             </Button>
           </form>
           <div className="mt-4 text-center">

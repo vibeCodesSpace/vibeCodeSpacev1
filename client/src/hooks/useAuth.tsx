@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
+import { supabase } from "@/lib/supabaseClient";
 
 interface User {
   id: number;
@@ -17,6 +18,7 @@ interface AuthContextType {
   user: User | null;
   login: (username: string, password: string) => Promise<void>;
   signup: (username: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   logout: () => void;
   loading: boolean;
 }
@@ -67,6 +69,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const signInWithGoogle = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+      });
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      throw new Error("Google Sign-In failed");
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("vibecode_user");
@@ -74,7 +89,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
+    <AuthContext.Provider
+      value={{ user, login, signup, signInWithGoogle, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
