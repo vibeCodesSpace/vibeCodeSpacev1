@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, FileText, Globe, Settings, LogOut } from "lucide-react";
@@ -85,9 +86,11 @@ const Dashboard = () => {
                 Upload your resume and get a professional portfolio site
                 instantly
               </p>
-              <Button variant="outline" className="w-full">
-                Upload Resume
-              </Button>
+              <Link href="/resume-portfolio">
+                <Button variant="outline" className="w-full">
+                  Upload Resume
+                </Button>
+              </Link>
             </CardContent>
           </Card>
 
