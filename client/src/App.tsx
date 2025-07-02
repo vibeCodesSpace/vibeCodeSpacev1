@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Router, Route, Switch } from "wouter";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import Index from "@/pages/Index";
+import LandingPage from "@/pages/LandingPage";
 import Auth from "@/pages/Auth";
 import Dashboard from "@/components/Dashboard";
 import NotFound from "@/pages/NotFound";
@@ -20,7 +20,7 @@ const App = () => (
         <Sonner />
         <Router>
           <Switch>
-            <Route path="/" component={Index} />
+            <Route path="/" component={LandingPage} />
             <Route path="/auth" component={Auth} />
             <Route path="/dashboard">
               <ProtectedRoute>
@@ -36,3 +36,4 @@ const App = () => (
 );
 
 export default App;
+
