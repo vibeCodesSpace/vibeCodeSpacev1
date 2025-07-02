@@ -1,9 +1,12 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const SiteGenerator = () => {
-  const [prompt, setPrompt] = useState('');
-  const [site, setSite] = useState<{ html: string; css: string; js: string } | null>(null);
+  const [prompt, setPrompt] = useState("");
+  const [site, setSite] = useState<{
+    html: string;
+    css: string;
+    js: string;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,16 +17,16 @@ const SiteGenerator = () => {
     setSite(null);
 
     try {
-      const response = await fetch('/api/ai/generate-site', {
-        method: 'POST',
+      const response = await fetch("/api/ai/generate-site", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ prompt }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate site.');
+        throw new Error("Failed to generate site.");
       }
 
       const data = await response.json();
@@ -40,7 +43,10 @@ const SiteGenerator = () => {
       <h1 className="text-2xl font-bold mb-4">Site Generator</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="prompt" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="prompt"
+            className="block text-sm font-medium text-gray-700"
+          >
             Enter a prompt to generate a site
           </label>
           <textarea
@@ -57,7 +63,7 @@ const SiteGenerator = () => {
           disabled={loading}
           className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:bg-gray-400"
         >
-          {loading ? 'Generating...' : 'Generate Site'}
+          {loading ? "Generating..." : "Generate Site"}
         </button>
       </form>
 
