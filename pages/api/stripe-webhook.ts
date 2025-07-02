@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const session = event.data.object;
       const customerId = session.customer;
       const subscription = await stripe.subscriptions.retrieve(
-        session.subscription
+        session.subscription,
       );
 
       await supabase

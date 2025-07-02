@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const ResumePortfolio = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -16,7 +15,7 @@ const ResumePortfolio = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!file) {
-      setError('Please select a file to upload.');
+      setError("Please select a file to upload.");
       return;
     }
 
@@ -25,16 +24,16 @@ const ResumePortfolio = () => {
     setPortfolio(null);
 
     const formData = new FormData();
-    formData.append('resume', file);
+    formData.append("resume", file);
 
     try {
-      const response = await fetch('/api/ai/process-resume', {
-        method: 'POST',
+      const response = await fetch("/api/ai/process-resume", {
+        method: "POST",
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Failed to process resume.');
+        throw new Error("Failed to process resume.");
       }
 
       const data = await response.json();
@@ -51,7 +50,10 @@ const ResumePortfolio = () => {
       <h1 className="text-2xl font-bold mb-4">Resume to Portfolio</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="resume" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="resume"
+            className="block text-sm font-medium text-gray-700"
+          >
             Upload your resume
           </label>
           <input
@@ -67,7 +69,7 @@ const ResumePortfolio = () => {
           disabled={loading}
           className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:bg-gray-400"
         >
-          {loading ? 'Generating...' : 'Generate Portfolio'}
+          {loading ? "Generating..." : "Generate Portfolio"}
         </button>
       </form>
 

@@ -62,7 +62,9 @@ const Billing = () => {
               </Button>
             </div>
           ) : (
-            <p className="text-white">Please log in to manage your subscription.</p>
+            <p className="text-white">
+              Please log in to manage your subscription.
+            </p>
           )}
         </CardContent>
       </Card>
