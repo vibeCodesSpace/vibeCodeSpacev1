@@ -20,12 +20,10 @@ router.post("/signup", async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
   // Supabase sends a confirmation email. The user is not signed in yet.
-  res
-    .status(200)
-    .json({
-      message: "Sign-up successful. Please check your email to confirm.",
-      user: data.user,
-    });
+  res.status(200).json({
+    message: "Sign-up successful. Please check your email to confirm.",
+    user: data.user,
+  });
 });
 
 // 2. Sign-in with email and password

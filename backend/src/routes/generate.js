@@ -66,11 +66,9 @@ router.post(
       });
     } catch (error) {
       console.error(`API Error for session ${sessionId}:`, error);
-      res
-        .status(500)
-        .json({
-          error: "An error occurred during the application generation process.",
-        });
+      res.status(500).json({
+        error: "An error occurred during the application generation process.",
+      });
     }
   },
 );
