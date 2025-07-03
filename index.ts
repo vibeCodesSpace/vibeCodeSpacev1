@@ -67,11 +67,11 @@ app.use((req, res, next) => {
   });
 
   // Serve static files from the 'dist/public' directory
-  app.use(express.static(path.join(__dirname, 'dist/public')));
+  app.use(express.static(path.join(__dirname, "dist/public")));
 
   // Serve index.html for all other routes
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/public', 'index.html'));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "dist/public", "index.html"));
   });
 
   // Setup Sentry error handler (must be after all routes)
