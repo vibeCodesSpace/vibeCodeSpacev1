@@ -1,0 +1,124 @@
+/* --- General Body & Background Styles --- */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure body takes at least full viewport height */
+}
+
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23000" width="100" height="100"/><g fill-opacity=".3"><circle fill="%23fff" cx="50" cy="50" r="1"/><circle fill="%23fff" cx="10" cy="10" r="1"/><circle fill="%23fff" cx="90" cy="90" r="1"/><circle fill="%23fff" cx="10" cy="90" r="1"/><circle fill="%23fff" cx="90" cy="10" r="1"/></g></svg>');
+    animation: stars 200s linear infinite;
+    z-index: -1;
+}
+
+@keyframes stars {
+    from { background-position: 0 0; }
+    to { background-position: -10000px 5000px; }
+}
+
+/* --- Main Content Wrapper --- */
+main {
+    flex-grow: 1; /* This is the key: it makes the main content take up available space */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* This centers content on short pages like the homepage */
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+/* --- Buttons --- */
+.buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn {
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #6366f1;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #4f52c4;
+}
+
+.btn-secondary {
+    border: 2px solid #6366f1;
+    color: #6366f1;
+}
+
+.btn-secondary:hover {
+    background-color: #6366f1;
+    color: #fff;
+}
+
+/* --- Footer --- */
+footer {
+    padding: 2rem;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.copyright {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #aaa;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 3rem;
+    }
+
+    p {
+        font-size: 1.125rem;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+}
