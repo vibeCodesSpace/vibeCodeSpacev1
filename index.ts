@@ -1,5 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
+import { registerRoutes } from "./backend/src/routes/index.js";
 import { setupVite, serveStatic, log } from "./vite";
 import { logger, requestLogger } from "./lib/logger.js";
 import { initSentry, setupSentryErrorHandler } from "./lib/sentry.js";
