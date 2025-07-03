@@ -10,7 +10,6 @@ if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
 }
 
-
 // Slack webhook transport
 class SlackTransport extends winston.Transport {
   private webhook: IncomingWebhook | null = null;

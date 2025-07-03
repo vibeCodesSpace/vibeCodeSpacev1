@@ -8,22 +8,22 @@ This document provides a comprehensive overview of the VibeCode project, its arc
 
 ### Core Features:
 
-*   **AI-Powered Application Generation:** Utilizes models from OpenAI, Anthropic, and Gemini to generate full-stack applications.
-*   **Dynamic Deployment:** Automatically deploys the generated applications to Render.
-*   **Freemium Model:** Implements a usage-based subscription model with different tiers (Free, Pro).
-*   **Authentication:** Provides a complete authentication system (signup, signin, social login, password reset) using Supabase.
-*   **Payments:** Integrates with Stripe for handling subscriptions and payments.
-*   **Resume-to-Portfolio:** A specific feature to automatically generate a portfolio website from a user's resume.
+- **AI-Powered Application Generation:** Utilizes models from OpenAI, Anthropic, and Gemini to generate full-stack applications.
+- **Dynamic Deployment:** Automatically deploys the generated applications to Render.
+- **Freemium Model:** Implements a usage-based subscription model with different tiers (Free, Pro).
+- **Authentication:** Provides a complete authentication system (signup, signin, social login, password reset) using Supabase.
+- **Payments:** Integrates with Stripe for handling subscriptions and payments.
+- **Resume-to-Portfolio:** A specific feature to automatically generate a portfolio website from a user's resume.
 
 ## 2. Architecture
 
 VibeCode is a monorepo with a modern full-stack architecture:
 
-*   **Frontend:** A Next.js application serves the user interface. It includes components for user interaction, such as the prompt interface and subscription management.
-*   **Backend:** A Node.js/Express server provides the API for the frontend. It handles user authentication, application generation logic, and payment processing.
-*   **Database:** A PostgreSQL database, managed via Supabase, stores user data, generated site information, and subscription details. Drizzle is used as the ORM.
-*   **AI Orchestration:** A central module in the backend (`aiOrchestrator.js`) manages the interaction with various AI providers to generate application code.
-*   **Deployment:** The `deployer.js` module automates the process of creating a GitHub repository and deploying the generated application to Render.
+- **Frontend:** A Next.js application serves the user interface. It includes components for user interaction, such as the prompt interface and subscription management.
+- **Backend:** A Node.js/Express server provides the API for the frontend. It handles user authentication, application generation logic, and payment processing.
+- **Database:** A PostgreSQL database, managed via Supabase, stores user data, generated site information, and subscription details. Drizzle is used as the ORM.
+- **AI Orchestration:** A central module in the backend (`aiOrchestrator.js`) manages the interaction with various AI providers to generate application code.
+- **Deployment:** The `deployer.js` module automates the process of creating a GitHub repository and deploying the generated application to Render.
 
 ## 3. Directory Structure
 
@@ -49,11 +49,11 @@ vibeCodeSpace_clone/
 
 ### Prerequisites:
 
-*   Node.js (v18 or later)
-*   npm or yarn
-*   Supabase Account
-*   Render Account
-*   GitHub Account
+- Node.js (v18 or later)
+- npm or yarn
+- Supabase Account
+- Render Account
+- GitHub Account
 
 ### Installation & Setup:
 
@@ -81,16 +81,16 @@ The following scripts are available in the respective `package.json` files:
 
 ### Backend (`backend/package.json`):
 
-*   `npm start`: Starts the production server.
-*   `npm run dev`: Starts the development server with `nodemon`.
-*   `npm test`: Runs tests using Jest.
+- `npm start`: Starts the production server.
+- `npm run dev`: Starts the development server with `nodemon`.
+- `npm test`: Runs tests using Jest.
 
 ### Frontend (`frontend/package.json`):
 
-*   `npm run dev`: Starts the Next.js development server.
-*   `npm run build`: Builds the Next.js application for production.
-*   `npm start`: Starts the Next.js production server.
-*   `npm run lint`: Lints the frontend code.
+- `npm run dev`: Starts the Next.js development server.
+- `npm run build`: Builds the Next.js application for production.
+- `npm start`: Starts the Next.js production server.
+- `npm run lint`: Lints the frontend code.
 
 ## 6. Core Implementation Details
 
