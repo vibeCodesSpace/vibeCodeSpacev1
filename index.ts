@@ -1,6 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./backend/src/routes/index.js";
-import { setupVite, serveStatic, log } from "./vite";
+import path from "path";
 import { logger, requestLogger } from "./lib/logger.js";
 import { initSentry, setupSentryErrorHandler } from "./lib/sentry.js";
 import { setupHealthChecks } from "./lib/health.js";
@@ -66,14 +66,13 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
-  }
+  // Serve static files from the 'dist/public' directory
+  app.use(express.static(path.join(__dirname, 'dist/public')));
+
+  // Serve index.html for all other routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/public', 'index.html'));
+  });
 
   // Setup Sentry error handler (must be after all routes)
   setupSentryErrorHandler(app);
