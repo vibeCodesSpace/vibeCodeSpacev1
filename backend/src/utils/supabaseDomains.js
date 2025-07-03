@@ -1,5 +1,5 @@
 // vibeCodeSpace_clone/backend/src/utils/supabaseDomains.js
-const axios = require('axios');
+const axios = require("axios");
 
 /**
  * Programmatically assigns a custom subdomain to your Supabase project.
@@ -13,30 +13,37 @@ async function assignSupabaseSubdomain(subdomain) {
   const apiToken = process.env.SUPABASE_MANAGEMENT_TOKEN;
 
   if (!projectRef || !apiToken) {
-    throw new Error('Supabase project reference and management token must be configured.');
+    throw new Error(
+      "Supabase project reference and management token must be configured.",
+    );
   }
 
   const apiUrl = `https://api.supabase.com/v1/projects/${projectRef}/custom-domains`;
 
   try {
-    console.log(`[Domains] Assigning subdomain: ${subdomain} to project: ${projectRef}`);
-    
+    console.log(
+      `[Domains] Assigning subdomain: ${subdomain} to project: ${projectRef}`,
+    );
+
     const response = await axios.post(
       apiUrl,
       { custom_domain: subdomain },
       {
         headers: {
-          'Authorization': `Bearer ${apiToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiToken}`,
+          "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     console.log(`[Domains] Successfully assigned subdomain: ${subdomain}`);
     return response.data;
   } catch (error) {
-    console.error('Error assigning Supabase subdomain:', error.response?.data || error.message);
-    throw new Error('Failed to assign Supabase subdomain.');
+    console.error(
+      "Error assigning Supabase subdomain:",
+      error.response?.data || error.message,
+    );
+    throw new Error("Failed to assign Supabase subdomain.");
   }
 }
 

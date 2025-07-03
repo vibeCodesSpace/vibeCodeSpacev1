@@ -1,6 +1,10 @@
 // vibeCodeSpace_clone/frontend/components/EmbeddedCheckoutForm.js
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { useState } from 'react';
+import {
+  useStripe,
+  useElements,
+  PaymentElement,
+} from "@stripe/react-stripe-js";
+import { useState } from "react";
 
 const EmbeddedCheckoutForm = () => {
   const stripe = useStripe();
@@ -33,8 +37,10 @@ const EmbeddedCheckoutForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <PaymentElement />
-      <button disabled={!stripe} style={{ marginTop: '20px' }}>Submit Payment</button>
-      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+      <button disabled={!stripe} style={{ marginTop: "20px" }}>
+        Submit Payment
+      </button>
+      {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
     </form>
   );
 };

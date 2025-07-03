@@ -1,5 +1,5 @@
 // vibeCodeSpace_clone/backend/jest.config.js
 module.exports = {
-  testEnvironment: 'node',
+  testEnvironment: "node",
   verbose: true,
 };

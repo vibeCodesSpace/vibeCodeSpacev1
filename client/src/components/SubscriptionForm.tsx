@@ -1,7 +1,11 @@
 // client/src/components/SubscriptionForm.tsx
-import React, { useState, useEffect } from 'react';
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { useRouter } from 'next/router';
+import React, { useState, useEffect } from "react";
+import {
+  useStripe,
+  useElements,
+  PaymentElement,
+} from "@stripe/react-stripe-js";
+import { useRouter } from "next/router";
 
 interface SubscriptionFormProps {
   priceId: string; // The Stripe Price ID for the subscription plan
@@ -22,12 +26,12 @@ const SubscriptionForm: React.FC<SubscriptionFormProps> = ({ priceId }) => {
     const fetchClientSecret = async () => {
       setLoading(true);
       try {
-        const response = await fetch('/api/stripe/create-subscription-intent', {
-          method: 'POST',
+        const response = await fetch("/api/stripe/create-subscription-intent", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             // Include authorization token if your API routes require it (e.g., Supabase JWT)
-            'Authorization': `Bearer ${localStorage.getItem('supabase.auth.token')}` // Example
+            Authorization: `Bearer ${localStorage.getItem("supabase.auth.token")}`, // Example
           },
           body: JSON.stringify({ priceId }),
         });
@@ -35,7 +39,9 @@ const SubscriptionForm: React.FC<SubscriptionFormProps> = ({ priceId }) => {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || 'Failed to create subscription intent.');
+          throw new Error(
+            data.error || "Failed to create subscription intent.",
+          );
         }
 
         setClientSecret(data.clientSecret);
@@ -88,8 +94,12 @@ const SubscriptionForm: React.FC<SubscriptionFormProps> = ({ priceId }) => {
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded shadow-md">
       <PaymentElement />
-      <button type="submit" disabled={!stripe || loading} className="mt-4 bg-blue-500 text-white p-2 rounded disabled:opacity-50">
-        {loading ? 'Processing...' : 'Subscribe'}
+      <button
+        type="submit"
+        disabled={!stripe || loading}
+        className="mt-4 bg-blue-500 text-white p-2 rounded disabled:opacity-50"
+      >
+        {loading ? "Processing..." : "Subscribe"}
       </button>
       {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>}
     </form>
@@ -97,4 +107,3 @@ const SubscriptionForm: React.FC<SubscriptionFormProps> = ({ priceId }) => {
 };
 
 export default SubscriptionForm;
-

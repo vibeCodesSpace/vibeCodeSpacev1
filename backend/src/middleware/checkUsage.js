@@ -1,5 +1,5 @@
 // vibeCodeSpace_clone/backend/src/middleware/checkUsage.js
-const { supabase } = require('../lib/supabase/server');
+const { supabase } = require("../lib/supabase/server");
 
 const PLAN_LIMITS = {
   free: 5,
@@ -9,20 +9,20 @@ const PLAN_LIMITS = {
 
 async function checkUsage(req, res, next) {
   if (!req.user) {
-    return res.status(401).json({ error: 'Authentication required.' });
+    return res.status(401).json({ error: "Authentication required." });
   }
   const userId = req.user.id;
 
   try {
     const { data: profile, error } = await supabase
-      .from('profiles')
-      .select('plan, generations_used')
-      .eq('id', userId)
+      .from("profiles")
+      .select("plan, generations_used")
+      .eq("id", userId)
       .single();
 
     if (error || !profile) {
-      console.error('Error fetching profile for usage check:', error);
-      return res.status(404).json({ error: 'User profile not found.' });
+      console.error("Error fetching profile for usage check:", error);
+      return res.status(404).json({ error: "User profile not found." });
     }
 
     const { plan, generations_used } = profile;
@@ -30,9 +30,9 @@ async function checkUsage(req, res, next) {
 
     if (generations_used >= limit) {
       return res.status(429).json({
-        error: 'Usage limit reached',
+        error: "Usage limit reached",
         message: `You have used your ${limit} available generations. Please upgrade to continue.`,
-        upgradePath: '/pricing', // Direct users to the upgrade page
+        upgradePath: "/pricing", // Direct users to the upgrade page
       });
     }
 
@@ -40,8 +40,8 @@ async function checkUsage(req, res, next) {
     req.profile = profile;
     next();
   } catch (err) {
-    console.error('Unexpected error in checkUsage middleware:', err);
-    return res.status(500).json({ error: 'Internal server error.' });
+    console.error("Unexpected error in checkUsage middleware:", err);
+    return res.status(500).json({ error: "Internal server error." });
   }
 }
 

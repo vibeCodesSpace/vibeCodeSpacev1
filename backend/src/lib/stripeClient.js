@@ -1,6 +1,6 @@
 // vibeCodeSpace_clone/backend/src/lib/stripeClient.js
-const Stripe = require('stripe');
-const { supabase } = require('./supabase/server');
+const Stripe = require("stripe");
+const { supabase } = require("./supabase/server");
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -12,9 +12,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
  */
 async function findOrCreateCustomer(userId, email) {
   const { data, error } = await supabase
-    .from('profiles')
-    .select('stripe_customer_id')
-    .eq('id', userId)
+    .from("profiles")
+    .select("stripe_customer_id")
+    .eq("id", userId)
     .single();
 
   if (error) throw error;
@@ -31,9 +31,9 @@ async function findOrCreateCustomer(userId, email) {
 
   // Update the user's profile with the new Stripe customer ID
   const { error: updateError } = await supabase
-    .from('profiles')
+    .from("profiles")
     .update({ stripe_customer_id: customer.id })
-    .eq('id', userId);
+    .eq("id", userId);
 
   if (updateError) throw updateError;
 

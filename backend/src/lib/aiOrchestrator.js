@@ -1,9 +1,9 @@
 // vibeCodeSpace_clone/backend/src/lib/aiOrchestrator.js
-const OpenaiClient = require('./openaiClient');
-const ClaudeClient = require('./claudeClient');
-const GeminiClient = require('./geminiClient');
-const { assignSupabaseSubdomain } = require('../utils/supabaseDomains');
-const { deployToRender } = require('./deployer'); // Import the new deployer
+const OpenaiClient = require("./openaiClient");
+const ClaudeClient = require("./claudeClient");
+const GeminiClient = require("./geminiClient");
+const { assignSupabaseSubdomain } = require("../utils/supabaseDomains");
+const { deployToRender } = require("./deployer"); // Import the new deployer
 
 // A simple in-memory store for generated code. In a real app, use a database or blob storage.
 const generatedCodeStore = new Map();
@@ -16,68 +16,88 @@ const generatedCodeStore = new Map();
  * @returns {Promise<object>} A structured object containing the generated code.
  */
 async function generateApplication(initialPrompt, sessionId) {
-    console.log(`[Orchestrator] Starting generation for session: ${sessionId}`);
+  console.log(`[Orchestrator] Starting generation for session: ${sessionId}`);
 
-    let conversationHistory = [{ role: 'user', content: getInitialSystemPrompt(initialPrompt) }];
-    let isDone = false;
-    let generatedApp = null;
-    let attempts = 0;
-    const MAX_ATTEMPTS = 5; // Prevents infinite loops
+  let conversationHistory = [
+    { role: "user", content: getInitialSystemPrompt(initialPrompt) },
+  ];
+  let isDone = false;
+  let generatedApp = null;
+  let attempts = 0;
+  const MAX_ATTEMPTS = 5; // Prevents infinite loops
 
-    while (!isDone && attempts < MAX_ATTEMPTS) {
-        attempts++;
-        console.log(`[Orchestrator] Attempt #${attempts}`);
+  while (!isDone && attempts < MAX_ATTEMPTS) {
+    attempts++;
+    console.log(`[Orchestrator] Attempt #${attempts}`);
 
-        // For this crucial task, we'll use the most powerful model available.
-        const aiResponse = await OpenaiClient.generateText(JSON.stringify(conversationHistory), 'gpt-4o');
-        
-        try {
-            const parsedResponse = JSON.parse(aiResponse);
+    // For this crucial task, we'll use the most powerful model available.
+    const aiResponse = await OpenaiClient.generateText(
+      JSON.stringify(conversationHistory),
+      "gpt-4o",
+    );
 
-            if (parsedResponse.status === 'requires_clarification') {
-                console.log('[Orchestrator] AI requires clarification. Sending follow-up questions.');
-                // In a real app, you would send these questions to the user and get their answers.
-                // For this simulation, we'll auto-answer them to continue the loop.
-                const answers = autoAnswerQuestions(parsedResponse.questions);
-                conversationHistory.push({ role: 'assistant', content: aiResponse }); // Add AI's questions
-                conversationHistory.push({ role: 'user', content: JSON.stringify(answers) }); // Add user's answers
-            } else if (parsedResponse.status === 'complete') {
-                console.log('[Orchestrator] AI generation complete.');
-                isDone = true;
-                generatedApp = parsedResponse.application;
-                
-                // --- New Subdomain Logic ---
-                const subdomain = `${generatedApp.name.toLowerCase().replace(/\s+/g, '-')}-${sessionId}.vibecodes.space`;
-                generatedApp.subdomain = subdomain;
-                await assignSupabaseSubdomain(subdomain);
-                // --- End New Subdomain Logic ---
+    try {
+      const parsedResponse = JSON.parse(aiResponse);
 
-                // Store the generated code
-                await storeGeneratedCode(sessionId, generatedApp);
+      if (parsedResponse.status === "requires_clarification") {
+        console.log(
+          "[Orchestrator] AI requires clarification. Sending follow-up questions.",
+        );
+        // In a real app, you would send these questions to the user and get their answers.
+        // For this simulation, we'll auto-answer them to continue the loop.
+        const answers = autoAnswerQuestions(parsedResponse.questions);
+        conversationHistory.push({ role: "assistant", content: aiResponse }); // Add AI's questions
+        conversationHistory.push({
+          role: "user",
+          content: JSON.stringify(answers),
+        }); // Add user's answers
+      } else if (parsedResponse.status === "complete") {
+        console.log("[Orchestrator] AI generation complete.");
+        isDone = true;
+        generatedApp = parsedResponse.application;
 
-                // --- Trigger Deployment Asynchronously ---
-                console.log(`[Orchestrator] Triggering deployment for session: ${sessionId}`);
-                deployToRender(sessionId, generatedApp).catch(err => {
-                    console.error(`[Deployer] Deployment failed for session ${sessionId}:`, err);
-                });
-                // --- End Trigger Deployment ---
+        // --- New Subdomain Logic ---
+        const subdomain = `${generatedApp.name.toLowerCase().replace(/\s+/g, "-")}-${sessionId}.vibecodes.space`;
+        generatedApp.subdomain = subdomain;
+        await assignSupabaseSubdomain(subdomain);
+        // --- End New Subdomain Logic ---
 
-            } else {
-                throw new Error('Invalid response format from AI.');
-            }
-        } catch (error) {
-            console.error('[Orchestrator] Error parsing AI response. Retrying with feedback.');
-            // If parsing fails, tell the AI to correct its format.
-            conversationHistory.push({ role: 'assistant', content: aiResponse });
-            conversationHistory.push({ role: 'user', content: 'Your last response was not valid JSON. Please provide your response in the specified JSON format.' });
-        }
+        // Store the generated code
+        await storeGeneratedCode(sessionId, generatedApp);
+
+        // --- Trigger Deployment Asynchronously ---
+        console.log(
+          `[Orchestrator] Triggering deployment for session: ${sessionId}`,
+        );
+        deployToRender(sessionId, generatedApp).catch((err) => {
+          console.error(
+            `[Deployer] Deployment failed for session ${sessionId}:`,
+            err,
+          );
+        });
+        // --- End Trigger Deployment ---
+      } else {
+        throw new Error("Invalid response format from AI.");
+      }
+    } catch (error) {
+      console.error(
+        "[Orchestrator] Error parsing AI response. Retrying with feedback.",
+      );
+      // If parsing fails, tell the AI to correct its format.
+      conversationHistory.push({ role: "assistant", content: aiResponse });
+      conversationHistory.push({
+        role: "user",
+        content:
+          "Your last response was not valid JSON. Please provide your response in the specified JSON format.",
+      });
     }
+  }
 
-    if (!generatedApp) {
-        throw new Error('Failed to generate application after multiple attempts.');
-    }
+  if (!generatedApp) {
+    throw new Error("Failed to generate application after multiple attempts.");
+  }
 
-    return generatedApp;
+  return generatedApp;
 }
 
 /**
@@ -85,7 +105,7 @@ async function generateApplication(initialPrompt, sessionId) {
  * This is critical for guiding the AI to produce a unique, complete application.
  */
 function getInitialSystemPrompt(prompt) {
-    return `
+  return `
         You are an expert full-stack web developer AI. Your task is to generate a complete, unique, and functional web application based on a user's prompt.
 
         **Output Format:**
@@ -131,22 +151,22 @@ function getInitialSystemPrompt(prompt) {
  * Simulates answering the AI's follow-up questions.
  */
 function autoAnswerQuestions(questions) {
-    const answers = questions.map(q => ({
-        question: q,
-        answer: `(Auto-generated answer) Let's go with a standard approach for this.`,
-    }));
-    return { answers };
+  const answers = questions.map((q) => ({
+    question: q,
+    answer: `(Auto-generated answer) Let's go with a standard approach for this.`,
+  }));
+  return { answers };
 }
 
 /**
  * Stores the generated code.
  */
 async function storeGeneratedCode(sessionId, code) {
-    console.log(`[Orchestrator] Storing code for session: ${sessionId}`);
-    generatedCodeStore.set(sessionId, code);
-    return true;
+  console.log(`[Orchestrator] Storing code for session: ${sessionId}`);
+  generatedCodeStore.set(sessionId, code);
+  return true;
 }
 
 module.exports = {
-    generateApplication,
+  generateApplication,
 };

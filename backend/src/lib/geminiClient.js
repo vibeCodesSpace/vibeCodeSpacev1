@@ -1,5 +1,5 @@
 // vibeCodeSpace_clone/backend/src/lib/geminiClient.js
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // --- Instructions for Setting Up the Gemini API Key ---
 // 1. Go to Google AI Studio: https://aistudio.google.com/
@@ -19,26 +19,26 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
  * @returns {Promise<string>} The generated text content.
  * @throws {Error} If the API call fails or returns no content.
  */
-async function generateText(prompt, modelName = 'gemini-1.5-flash') {
-    if (!prompt) {
-        throw new Error('Prompt is required.');
+async function generateText(prompt, modelName = "gemini-1.5-flash") {
+  if (!prompt) {
+    throw new Error("Prompt is required.");
+  }
+
+  try {
+    const model = genAI.getGenerativeModel({ model: modelName });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    if (!text) {
+      throw new Error("No content returned from Gemini.");
     }
 
-    try {
-        const model = genAI.getGenerativeModel({ model: modelName });
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-        
-        if (!text) {
-            throw new Error('No content returned from Gemini.');
-        }
-
-        return text.trim();
-    } catch (error) {
-        console.error('Error calling Gemini API:', error);
-        throw new Error('Failed to generate text from Gemini.');
-    }
+    return text.trim();
+  } catch (error) {
+    console.error("Error calling Gemini API:", error);
+    throw new Error("Failed to generate text from Gemini.");
+  }
 }
 
 /**
@@ -49,28 +49,31 @@ async function generateText(prompt, modelName = 'gemini-1.5-flash') {
  * @param {string} [modelName='gemini-1.5-flash'] The model to use.
  * @returns {Promise<string>} The generated code.
  */
-async function generateCode(description, language = 'javascript', modelName = 'gemini-1.5-flash') {
-    const prompt = `Generate a ${language} code snippet for the following description: ${description}. Only output the raw code, without any markdown formatting, explanations, or example usage.`;
+async function generateCode(
+  description,
+  language = "javascript",
+  modelName = "gemini-1.5-flash",
+) {
+  const prompt = `Generate a ${language} code snippet for the following description: ${description}. Only output the raw code, without any markdown formatting, explanations, or example usage.`;
 
-    try {
-        const model = genAI.getGenerativeModel({ model: modelName });
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+  try {
+    const model = genAI.getGenerativeModel({ model: modelName });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
 
-        if (!text) {
-            throw new Error('No code returned from Gemini.');
-        }
-
-        return text.trim();
-    } catch (error) {
-        console.error('Error calling Gemini API for code generation:', error);
-        throw new Error('Failed to generate code from Gemini.');
+    if (!text) {
+      throw new Error("No code returned from Gemini.");
     }
+
+    return text.trim();
+  } catch (error) {
+    console.error("Error calling Gemini API for code generation:", error);
+    throw new Error("Failed to generate code from Gemini.");
+  }
 }
 
-
 module.exports = {
-    generateText,
-    generateCode,
+  generateText,
+  generateCode,
 };
