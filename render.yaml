@@ -25,7 +25,9 @@ services:
     region: oregon
     plan: free
     buildCommand: "npm install && npm run build"
-    startCommand: "node dist/index.js"
+    startCommand: |
+      ls -lR
+      node dist/index.js
     envVars:
       # The DATABASE_URL is automatically injected from the 'vibecode-db' service
       - key: DATABASE_URL
