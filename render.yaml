@@ -16,18 +16,16 @@ services:
     # into connected services.
 
   # -----------------
-  # Backend Service (Node.js/Express)
+  # Web Service (Node.js/Express)
   # -----------------
   - type: web
-    name: vibecode-backend
+    name: vibecode
     env: node
     # The region can be changed to be closer to your users
     region: oregon
     plan: free
-    # Specifies the root directory for the backend code
-    rootDir: ./backend
-    buildCommand: "npm install"
-    startCommand: "node src/server.js"
+    buildCommand: "cd backend && npm install && npm run build:backend"
+    startCommand: "node backend/dist/index.js"
     envVars:
       # The DATABASE_URL is automatically injected from the 'vibecode-db' service
       - key: DATABASE_URL
@@ -46,25 +44,3 @@ services:
         sync: false
       - key: GEMINI_API_KEY
         sync: false
-
-  # -----------------
-  # Frontend Service (React/Next.js)
-  # -----------------
-  - type: web
-    name: vibecode-frontend
-    env: node
-    region: oregon
-    plan: free
-    # Specifies the root directory for the frontend code
-    rootDir: ./frontend
-    buildCommand: "npm install && npm run build"
-    startCommand: "npm run start"
-    envVars:
-      # The backend URL is automatically discovered and injected
-      - key: NEXT_PUBLIC_BACKEND_URL
-        value: ${vibecode-backend.url}
-      # Public-facing Supabase credentials
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        value: your_supabase_url
-      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
-        value: your_supabase_anon_key

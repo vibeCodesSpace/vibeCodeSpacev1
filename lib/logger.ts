@@ -1,5 +1,15 @@
 import winston from "winston";
 import { IncomingWebhook } from "@slack/webhook";
+import fs from "fs";
+import path from "path";
+
+const logDir = "logs";
+
+// Create logs directory if it doesn't exist
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir);
+}
+
 
 // Slack webhook transport
 class SlackTransport extends winston.Transport {
