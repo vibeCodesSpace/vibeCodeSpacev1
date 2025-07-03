@@ -79,3 +79,4 @@ jspm_packages/
 # Store configuration
 .replit
 replit.nix
+.env.local.save

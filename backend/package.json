@@ -20,6 +20,7 @@
     "node-pg-migrate": "^8.0.3",
     "openai": "^5.8.2",
     "simple-git": "^3.28.0",
+    "stripe": "^18.3.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
