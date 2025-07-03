@@ -24,7 +24,7 @@ services:
     # The region can be changed to be closer to your users
     region: oregon
     plan: free
-    buildCommand: "npm install && npm run build && npm run build:backend"
+    buildCommand: "npm install && npm run build && npm run build:backend && echo '--- Contents of dist directory ---' && ls -lR dist"
     startCommand: "node dist/index.js"
     envVars:
       # The DATABASE_URL is automatically injected from the 'vibecode-db' service
