@@ -1,32 +1,70 @@
+# render.yaml: Configuration for deploying VibeCode on Render
+# This file defines three services:
+# 1. A PostgreSQL database for data persistence.
+# 2. A Node.js Express backend service.
+# 3. A React/Next.js frontend web service.
+
 services:
+  # -----------------
+  # PostgreSQL Database
+  # -----------------
+  - type: psql
+    name: vibecode-db
+    # The 'plan' tier can be adjusted based on your needs (e.g., 'starter')
+    plan: free
+    # Render will automatically provision a database and inject its URL
+    # into connected services.
+
+  # -----------------
+  # Backend Service (Node.js/Express)
+  # -----------------
   - type: web
-    name: vibecode-app
+    name: vibecode-backend
     env: node
+    # The region can be changed to be closer to your users
     region: oregon
-    plan: starter
-    buildCommand: npm run build
-    startCommand: npm start
-    healthCheckPath: /health
+    plan: free
+    # Specifies the root directory for the backend code
+    rootDir: ./backend
+    buildCommand: "npm install"
+    startCommand: "node src/server.js"
     envVars:
-      - key: NODE_ENV
-        value: production
+      # The DATABASE_URL is automatically injected from the 'vibecode-db' service
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vibecode-db
+          property: connectionString
+      # Placeholders for Supabase credentials (if you use both)
+      - key: SUPABASE_URL
+        value: your_supabase_url
+      - key: SUPABASE_KEY
+        sync: false # Use 'sync: false' for sensitive keys
+      # Placeholders for AI service keys
       - key: OPENAI_API_KEY
         sync: false
-      - key: ANTHROPIC_API_KEY
-        sync: false  
+      - key: CLAUDE_API_KEY
+        sync: false
       - key: GEMINI_API_KEY
         sync: false
-      - key: DATABASE_URL
-        sync: false
-      - key: SENTRY_DSN
-        sync: false
-      - key: SLACK_WEBHOOK_URL
-        sync: false
-      - key: LOG_LEVEL
-        value: info
-    autoDeploy: true
-    
-databases:
-  - name: vibecode-db
-    plan: starter
+
+  # -----------------
+  # Frontend Service (React/Next.js)
+  # -----------------
+  - type: web
+    name: vibecode-frontend
+    env: node
     region: oregon
+    plan: free
+    # Specifies the root directory for the frontend code
+    rootDir: ./frontend
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm run start"
+    envVars:
+      # The backend URL is automatically discovered and injected
+      - key: NEXT_PUBLIC_BACKEND_URL
+        value: ${vibecode-backend.url}
+      # Public-facing Supabase credentials
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: your_supabase_url
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        value: your_supabase_anon_key

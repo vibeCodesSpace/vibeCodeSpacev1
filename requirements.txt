@@ -1,0 +1,3 @@
+# This file is for Python dependencies.
+# For example, if you use a Python-based AI SDK:
+# openai-sdk==1.0.0

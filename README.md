@@ -1,125 +1,168 @@
-# VibeCode - AI-Powered Web App Generator
+# VibeCode Alpha
 
-## Overview
+VibeCode is a revolutionary AI-powered platform that generates complete, unique, and deployable web applications from a single natural language prompt. This repository contains the core infrastructure for the VibeCode application, including the frontend, backend, AI orchestration logic, and deployment automation.
 
-VibeCode is a GPT-powered web application and website generator that allows users to create functional applications from simple text descriptions or uploaded resumes. The platform instantly builds and hosts personal sites or functional apps with minimal setup required.
+## Table of Contents
 
-## System Architecture
+- [VibeCode Alpha](#vibecode-alpha)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Project Structure](#project-structure)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+  - [Usage](#usage)
+  - [Core Implementation Details](#core-implementation-details)
+    - [1. AI Orchestration](#1-ai-orchestration)
+    - [2. Dynamic Deployment](#2-dynamic-deployment)
+    - [3. Freemium Model](#3-freemium-model)
+  - [Security](#security)
+  - [Testing](#testing)
+  - [Next Steps & Future Vision](#next-steps--future-vision)
 
-This is a full-stack TypeScript application built with a modern monorepo structure:
+## Features
 
-### Frontend Architecture
+*   **AI-Powered Application Generation:** Leverages cutting-edge AI models (OpenAI, Claude, Gemini) to generate full-stack web applications.
+*   **Dynamic Model Selection:** Intelligently chooses the best AI model for a given prompt.
+*   **Iterative Prompting:** Engages in a follow-up Q&A loop with the AI to clarify requirements and generate more accurate applications.
+*   **Automated Deployment:** Automatically deploys generated applications to Render, providing users with a live URL.
+*   **Secure by Design:** Implements a robust set of security best practices, including secure secret management, input/output validation, and rate limiting.
+*   **Freemium Model:** Tracks user usage and provides a clear path for upgrading to premium plans.
+*   **Custom Subdomains:** (Planned) Assigns unique, custom subdomains for each generated application using Supabase.
 
-- **Framework**: React 18 with TypeScript and Vite
-- **UI Library**: Shadcn/ui components with Radix UI primitives
-- **Styling**: Tailwind CSS with custom design system
-- **State Management**: React Query for server state, React Context for auth
-- **Routing**: React Router for client-side navigation
-- **Build Tool**: Vite with hot module replacement
+## Project Structure
 
-### Backend Architecture
+The project is organized as a monorepo with a clear separation of concerns:
 
-- **Server**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
-- **Database Provider**: Neon Database (serverless PostgreSQL)
-- **Authentication**: Currently mock auth (designed for future Supabase integration)
-- **Session Storage**: PostgreSQL-based sessions via connect-pg-simple
+```
+.
+├── frontend/         # Next.js frontend application
+│   ├── components/   # React components
+│   └── pages/        # Next.js pages
+├── backend/          # Node.js/Express backend API
+│   ├── src/
+│   │   ├── lib/      # Core logic (AI clients, orchestrator, deployer)
+│   │   ├── middleware/ # Express middleware (auth, usage tracking)
+│   │   ├── routes/   # API routes
+│   │   └── server.js # Express server entry point
+│   └── migrations/   # Database migrations
+├── common/           # Shared types and interfaces
+└── ...
+```
 
-### Development Setup
+## Getting Started
 
-- **Runtime**: Node.js 20
-- **Package Manager**: npm with package-lock.json
-- **Development**: Hot reload with Vite dev server
-- **TypeScript**: Strict mode with path aliases
+### Prerequisites
 
-## Key Components
+*   Node.js (v18 or later)
+*   npm or yarn
+*   A Supabase account
+*   A Render account
+*   A GitHub account
 
-### Data Layer
+### Installation
 
-- **Schema**: Defined in `shared/schema.ts` using Drizzle ORM
-- **Current Tables**: Users table with username/password authentication
-- **Storage Interface**: Abstracted storage layer with in-memory fallback
-- **Database Migrations**: Managed via Drizzle Kit
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/vibeCodesSpace/VibeCodeAlpha.git
+    cd VibeCodeAlpha
+    ```
 
-### Authentication System
+2.  **Install backend dependencies:**
+    ```bash
+    cd backend
+    npm install
+    ```
 
-- **Current State**: Mock authentication with localStorage persistence
-- **Future Integration**: Designed for Supabase Auth integration
-- **Protected Routes**: Route-level protection with loading states
-- **User Context**: React Context provider for global auth state
+3.  **Install frontend dependencies:**
+    ```bash
+    cd ../frontend
+    npm install
+    ```
 
-### AI Generation Features
+4.  **Set up environment variables:**
+    *   Create a `.env` file in the `backend` directory by copying `.env.example`.
+    *   Fill in the required API keys and credentials for Supabase, Render, GitHub, and the AI providers.
 
-- **Text-to-App**: AI generator component for converting prompts to code
-- **Resume-to-Portfolio**: Resume processor for creating portfolio sites
-- **Mock Implementation**: Simulated AI responses for development
-- **Future Integration**: Designed for OpenAI GPT API integration
+## Usage
 
-### UI Components
+1.  **Start the backend server:**
+    ```bash
+    cd backend
+    npm run dev
+    ```
 
-- **Design System**: Shadcn/ui with custom Tailwind configuration
-- **Landing Page**: Marketing site with hero, features, testimonials
-- **Dashboard**: Protected area for authenticated users
-- **Forms**: React Hook Form with Zod validation
-- **Responsive**: Mobile-first design with breakpoint utilities
+2.  **Start the frontend development server:**
+    ```bash
+    cd ../frontend
+    npm run dev
+    ```
 
-## Data Flow
+3.  Open your browser to `http://localhost:3000` to access the VibeCode application.
 
-1. **User Authentication**: Mock login/signup → Context state → Protected routes
-2. **AI Generation**: User prompt → AI service (simulated) → Generated code → Display
-3. **Resume Processing**: File upload → Parser (simulated) → Portfolio generation → Preview
-4. **Database Operations**: Application → Storage interface → Drizzle ORM → PostgreSQL
+## Core Implementation Details
 
-## External Dependencies
+### 1. AI Orchestration
 
-### Core Dependencies
+The magic of VibeCode happens in the **AI Orchestrator** (`backend/src/lib/aiOrchestrator.js`). This module is responsible for:
 
-- **UI Framework**: React, React Router, React Query
-- **Database**: Drizzle ORM, Neon Database driver
-- **UI Components**: Radix UI primitives, Lucide icons
-- **Styling**: Tailwind CSS, class-variance-authority
-- **Forms**: React Hook Form, Hookform resolvers
-- **Build Tools**: Vite, ESBuild, TypeScript
+*   Taking a user's initial prompt.
+*   Engaging in an iterative loop with an AI model (currently GPT-4o) to clarify requirements and refine the application.
+*   Generating a structured JSON object containing the complete code for the frontend and backend of the new application.
 
-### Development Dependencies
+### 2. Dynamic Deployment
 
-- **Runtime**: Node.js, tsx for TypeScript execution
-- **Linting**: TypeScript strict mode
-- **Hot Reload**: Vite dev server with middleware
+Once an application is generated, the orchestrator triggers the **Deployer** module (`backend/src/lib/deployer.js`). This module:
 
-### Future Integrations
+*   Creates a new, private GitHub repository using the GitHub API.
+*   Pushes the generated code to this new repository.
+*   Uses the Render API to programmatically create new Web Services and Static Sites, pointing them to the new repository.
+*   This process is asynchronous to avoid blocking the user interface.
 
-- **AI Service**: OpenAI GPT API for code generation
-- **Authentication**: Supabase Auth for user management
-- **Email Service**: Planned for domain/email upgrades
-- **Payment Processing**: For premium features
+### 3. Freemium Model
 
-## Deployment Strategy
+VibeCode includes a freemium model to manage usage and provide a path to monetization.
 
-### Development Environment
+*   **Database:** The `profiles` table in Supabase is extended with `plan` and `generations_used` columns.
+*   **Atomic Updates:** A PostgreSQL function (`increment_generations`) is used to atomically update a user's usage count, preventing race conditions.
+*   **Middleware:** An Express middleware (`backend/src/middleware/checkUsage.js`) checks a user's plan and usage before allowing access to the resource-intensive generation endpoint.
 
-- **Runtime**: Replit with Node.js 20 and PostgreSQL 16
-- **Port Configuration**: Frontend on 5000, proxied to port 80
-- **Hot Reload**: Vite dev server with Express backend
+## Security
 
-### Production Build
+Security is a top priority for VibeCode. We have implemented a multi-layered security strategy:
 
-- **Frontend**: Vite build to `dist/public`
-- **Backend**: ESBuild bundle to `dist/index.js`
-- **Static Assets**: Served via Express static middleware
-- **Database**: PostgreSQL connection via environment variables
+*   **Input Validation:** All API endpoints use `express-validator` to validate and sanitize incoming data.
+*   **Prompt Injection Defense:** We use instructional defense in our AI prompts to treat user input as data, not as instructions.
+*   **Output Moderation:** All AI-generated content is passed through the OpenAI Moderation API to filter out harmful content.
+*   **Rate Limiting:** `express-rate-limit` is used to protect all public API endpoints from abuse.
+*   **Secret Management:** All API keys and sensitive data are managed through environment variables and Render's secure secret management. **No secrets are ever exposed to the client.**
+*   **Data Encryption:** All data is encrypted in transit (TLS/HTTPS) and at rest by our cloud providers (Supabase and Render).
+*   **Access Control:** We use Supabase's Row-Level Security (RLS) and role-based access control (RBAC) middleware to ensure users can only access their own data.
 
-### Hosting Strategy
+## Testing
 
-- **Platform**: Replit Autoscale deployment
-- **Build Command**: `npm run build`
-- **Start Command**: `npm run start`
-- **Environment**: Production Node.js with compiled assets
+We have a comprehensive testing strategy that includes:
 
-## Changelog
+*   **Unit Tests:** Using Jest to test individual backend modules and frontend components in isolation.
+*   **Integration Tests:** Using Jest and Supertest to test the backend API endpoints.
+*   **End-to-End Tests:** (Planned) Using Playwright or Cypress to test the full user flow, from prompting to deployment.
 
-- June 25, 2025. Initial setup
+To run the tests:
 
-## User Preferences
+```bash
+# From the backend directory
+npm test
+```
 
-Preferred communication style: Simple, everyday language.
+## Next Steps & Future Vision
+
+VibeCode is currently in its alpha stage. Our roadmap includes:
+
+*   **Enhanced User Experience:** Improving loading states, providing real-time progress indicators for generation and deployment, and creating a more polished UI.
+*   **Advanced AI Capabilities:**
+    *   Allowing users to choose their preferred AI model.
+    *   Implementing a more sophisticated prompt analysis to better understand user intent.
+    *   Enabling users to "eject" their generated code and download it as a zip file.
+*   **Full Payment Integration:** Integrating with Stripe or Lemon Squeezy to handle premium plan upgrades.
+*   **Comprehensive Testing:** Expanding our test suite to cover more edge cases and user scenarios.
+*   **Community Features:** Building a gallery of user-generated applications and allowing users to share their creations.
